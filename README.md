@@ -27,13 +27,15 @@ This resulted in the following source and destination points:
 
 I verified that my perspective transform was working as expected by drawing the src and dst points onto a test image and its warped counterpart to verify that the lines appear parallel in the warped image.
 
-4. Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+4. Then I use sliding window and let it iterate through `nwindow` to track the curvature. And I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
 
 
 
-## Here is a link to my video results
+## 3. Here is a link to my video results
 
 
 ## Discussion
+- The first difficulty I have met is to find the best threshold for transfering the color image to binary image without losing too much information. This was solved by trying different parameters' setting.
+
 
 

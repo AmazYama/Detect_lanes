@@ -6,7 +6,7 @@ import pickle
 from threshold_combining import combine_thresh
 
 def perspective_transform(img):
-    im_sz = (img.shape[0],img.shape[1])   #720,1280
+    im_sz = (img.shape[1],img.shape[0])   #720,1280
     src = np.float32(
 		[[200, 720],
 		[1100, 720],
@@ -28,15 +28,14 @@ def perspective_transform(img):
     return warped, M
 
 if __name__=='__main__':
-    img = mpimg.imread('test_images/test5.jpg')
+    img = mpimg.imread('test_images/test2.jpg')
     with open('camera_cali_parameters.pickle','rb') as f:
         output = pickle.load(f)
     mtx = output['mtx']
     dist = output['dist']
-    print(mtx)
-    print(dist)
+
     img = cv2.undistort(img, mtx, dist, None, mtx)
-    combine_out, gradx, mag_binary, dir_binary, hls_binary = combine_thresh(img,3)
-    warped, M = perspective_transform(img)
+    combine_out, gradx, grady, mag_binary, dir_binary, hls_binary = combine_thresh(img,3)
+    warped, M = perspective_transform(combine_out)
     plt.imshow(warped, cmap='gray')
-    plt.show()
+    plt.savefig('example_images/perspective_trans.png')
