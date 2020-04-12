@@ -216,9 +216,7 @@ if __name__=="__main__":
     binary_warped = mpimg.imread('example_images/perspective_trans.png')
     binary_warped = cv2.cvtColor(binary_warped, cv2.COLOR_BGR2GRAY)
     out_img, left_fit, right_fit = fit_polynomial(binary_warped)
-    # plt.imshow(out_img)
-    # plt.savefig('example_images/sliding_win.png')
-    # 
+
     result, left_fitx, right_fitx, ploty = search_around_poly(binary_warped, left_fit, right_fit)
     plt.imshow(result)
     plt.savefig('example_images/search_around_poly.png')

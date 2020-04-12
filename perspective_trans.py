@@ -20,12 +20,12 @@ def perspective_transform(img):
     )
 
     M = cv2.getPerspectiveTransform(src, dst)
-    #Minv = cv2.getPerspectiveTransform(dist, src)
+    Minv = cv2.getPerspectiveTransform(dst, src)
 
     # Create warped image - use linear interpolation
     warped = cv2.warpPerspective(img, M, im_sz, flags=cv2.INTER_LINEAR)
     #unwarped = cv2.warpPerspective(warped, Minv, (warped.shape[1], warped.shape[0]), flags=cv2.INTER_LINEAR)
-    return warped, M
+    return warped, M, Minv
 
 if __name__=='__main__':
     img = mpimg.imread('test_images/test2.jpg')
