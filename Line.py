@@ -118,12 +118,12 @@ def fit_polynomial(binary_warped):
     return out_img, left_fit, right_fit
 
 def fit_poly(img_shape, leftx, lefty, rightx, righty):
-     ### TO-DO: Fit a second order polynomial to each with np.polyfit() ###
+    # Fit a second order polynomial to each with np.polyfit() ###
     left_fit = np.polyfit(lefty, leftx, 2)
     right_fit = np.polyfit(righty, rightx, 2)
     # Generate x and y values for plotting
     ploty = np.linspace(0, img_shape[0]-1, img_shape[0])
-    ### TO-DO: Calc both polynomials using ploty, left_fit and right_fit ###
+    # Calc both polynomials using ploty, left_fit and right_fit ###
     left_fitx = left_fit[0]*ploty**2 + left_fit[1]*ploty + left_fit[2]
     right_fitx = right_fit[0]*ploty**2 + right_fit[1]*ploty + right_fit[2]
     
@@ -132,7 +132,6 @@ def fit_poly(img_shape, leftx, lefty, rightx, righty):
 def search_around_poly(binary_warped, left_fit, right_fit):
     # HYPERPARAMETER
     # Choose the width of the margin around the previous polynomial to search
-    # The quiz grader expects 100 here, but feel free to tune on your own!
     margin = 40
 
     # Grab activated pixels
@@ -140,10 +139,8 @@ def search_around_poly(binary_warped, left_fit, right_fit):
     nonzeroy = np.array(nonzero[0])
     nonzerox = np.array(nonzero[1])
     
-    ### TO-DO: Set the area of search based on activated x-values ###
-    ### within the +/- margin of our polynomial function ###
-    ### Hint: consider the window areas for the similarly named variables ###
-    ### in the previous quiz, but change the windows to our new search area ###
+    # Set the area of search based on activated x-values ###
+    # Within the +/- margin of our polynomial function ###
     left_lane_inds = ((nonzerox > (left_fit[0]*(nonzeroy**2) + left_fit[1]*nonzeroy + 
                     left_fit[2] - margin)) & (nonzerox < (left_fit[0]*(nonzeroy**2) + 
                     left_fit[1]*nonzeroy + left_fit[2] + margin)))
@@ -187,31 +184,38 @@ def search_around_poly(binary_warped, left_fit, right_fit):
     # Plot the polynomial lines onto the image
     plt.plot(left_fitx, ploty, color='yellow')
     plt.plot(right_fitx, ploty, color='yellow')
-    ## End visualization steps ##
     
     return result, left_fitx, right_fitx, ploty 
 
 def measure_curvature_real(left_fitx, right_fitx, ploty):
-# Define conversions in x and y from pixels space to meters
+    # Define conversions in x and y from pixels space to meters
     ym_per_pix = 30/720 # meters per pixel in y dimension
-    xm_per_pix = 3.7/1280 # meters per pixel in x dimension
 
     # Start by generating our fake example data
-
     ploty, left_fit_cr, right_fit_cr = ploty, left_fitx, right_fitx
 
-    # Define y-value where we want radius of curvature
-    # We'll choose the maximum y-value, corresponding to the bottom of the image
+    # Define y-value. Choose the maximum y-value, corresponding to the bottom of the image.
     y_eval = np.max(ploty)
     
     # Calculation of R_curve (radius of curvature)
     left_curverad = ((1 + (2*left_fit_cr[0]*y_eval*ym_per_pix + left_fit_cr[1])**2)**1.5) / np.absolute(2*left_fit_cr[0])
     right_curverad = ((1 + (2*right_fit_cr[0]*y_eval*ym_per_pix + right_fit_cr[1])**2)**1.5) / np.absolute(2*right_fit_cr[0])
-    
+
+
     return left_curverad, right_curverad
 
+def measure_vehicle_position(img, left_fit, right_fit):
 
-if __name__=="__main__":    
+    xm_per_pix = 3.7/1280 # meters per pixel in x dimension
+    bottom_y = img.shape[0] - 1
+    bottom_x_left = left_fit[0] * (bottom_y ** 2) + left_fit[1] * bottom_y + left_fit[2]
+    bottom_x_right = right_fit[0] * (bottom_y ** 2) + right_fit[1] * bottom_y + right_fit[2]
+    vehicle_position = (img.shape[1] / 2 - (bottom_x_left + bottom_x_right) / 2) * xm_per_pix
+
+    return vehicle_position
+
+if __name__=="__main__":
+
     # Sliding window step
     binary_warped = mpimg.imread('example_images/perspective_trans.png')
     binary_warped = cv2.cvtColor(binary_warped, cv2.COLOR_BGR2GRAY)
@@ -223,4 +227,3 @@ if __name__=="__main__":
     #
     left_curverad, right_curverad = measure_curvature_real(left_fitx, right_fitx, ploty)
     print(left_curverad, 'm', right_curverad, 'm')
-    

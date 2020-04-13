@@ -40,7 +40,7 @@ if __name__ == "__main__":
         pickle.dump(coefficient, f)
         
     # For testing
-    img = mpimg.imread('camera_cal/calibration1.jpg')
+    img = mpimg.imread('test_images/straight_lines1.jpg')
     dst = cv2.undistort(img, mtx, dist, None, mtx)
     plt.imshow(dst)
     plt.savefig('example_images/undistorted_im.jpg')

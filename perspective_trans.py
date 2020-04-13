@@ -7,6 +7,8 @@ from threshold_combining import combine_thresh
 
 def perspective_transform(img):
     im_sz = (img.shape[1],img.shape[0])   #720,1280
+
+    # Hard coded src and dst
     src = np.float32(
 		[[200, 720],
 		[1100, 720],
