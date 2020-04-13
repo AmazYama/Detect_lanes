@@ -53,6 +53,7 @@ https://github.com/AmazYama/Detect_lanes/blob/master/example_images/video_test.m
 `perspective_trans.py`
 `Line.py`
 3. After the calibration,the 2. step can be skipped and jump to this step to process video directly.
+`process_video.py`
 
 ## Discussion
 - The first difficulty I have met is to find the best threshold for transferring the color image to binary image without losing too much information. This was solved by trying different parameters' setting.
