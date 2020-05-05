@@ -42,21 +42,27 @@ def hls_thresh(img, thresh=(0,255)):
     hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)
     s_channel = hls[:,:,2]
     hls_binary = np.zeros_like(s_channel)
-    hls_binary[(s_channel>thresh[0]) & (s_channel <= thresh[1])] = 1
+    hls_binary[(s_channel>thresh[0]) & (s_channel <= thresh[1])] = 1  
     return hls_binary
 
+
 def combine_thresh(image, ksize):
-    gradx = abs_sobel_thresh(image, orient='x', sobel_kernel=ksize, thresh=(70, 255))
-    grady = abs_sobel_thresh(image, orient='y', sobel_kernel=ksize, thresh=(100, 255))
-    mag_binary = mag_thresh(image, sobel_kernel=ksize, mag_thresh=(100, 255))
-    dir_binary = dir_threshold(image, sobel_kernel=ksize*5, thresh=(0.8, 1.2))
+    gradx = abs_sobel_thresh(image, orient='x', sobel_kernel=ksize, thresh=(45, 255)) # 50  #20
+    grady = abs_sobel_thresh(image, orient='y', sobel_kernel=ksize, thresh=(45, 255)) #50  #20
+    mag_binary = mag_thresh(image, sobel_kernel=ksize, mag_thresh=(50, 255))
+    dir_binary = dir_threshold(image, sobel_kernel=ksize*5, thresh=(0.6, 1.2))
     hls_binary = hls_thresh(image, thresh=(200, 255))
     combine_out = np.zeros_like(dir_binary)
-    combine_out[((mag_binary ==1) & (dir_binary ==1)| (grady==1) & (gradx == 1) ) | (hls_binary == 1)]=1
+
+
+    combine_out[((mag_binary ==1) & (dir_binary ==1) & (grady==1) & (gradx == 1) ) | (hls_binary == 1)]=1
+
+    
     return combine_out, gradx, grady, mag_binary, dir_binary, hls_binary
 
 if __name__ == '__main__':
-    img = mpimg.imread('test_images/straight_lines1.jpg') 
+    img = mpimg.imread('test_images/test_im7.png') 
+    #img = mpimg.imread('test_images/test1.jpg') 
     with open('camera_cali_parameters.pickle', 'rb') as f:
         para = pickle.load(f)
     mtx = para['mtx']

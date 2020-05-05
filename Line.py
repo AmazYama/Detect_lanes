@@ -190,10 +190,12 @@ def search_around_poly(binary_warped, left_fit, right_fit):
 def measure_curvature_real(left_fitx, right_fitx, ploty):
     # Define conversions in x and y from pixels space to meters
     ym_per_pix = 30/720 # meters per pixel in y dimension
+    xm_per_pix = 3.7/700 # meters per pixel in x dimension
 
     # Start by generating our fake example data
-    ploty, left_fit_cr, right_fit_cr = ploty, left_fitx, right_fitx
-
+    left_fit_cr = np.polyfit(ploty*ym_per_pix, left_fitx*xm_per_pix, 2)
+    right_fit_cr = np.polyfit(ploty*ym_per_pix, right_fitx*xm_per_pix, 2)
+    
     # Define y-value. Choose the maximum y-value, corresponding to the bottom of the image.
     y_eval = np.max(ploty)
     

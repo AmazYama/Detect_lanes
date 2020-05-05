@@ -30,7 +30,7 @@ def perspective_transform(img):
     return warped, M, Minv
 
 if __name__=='__main__':
-    img = mpimg.imread('test_images/test2.jpg')
+    img = mpimg.imread('test_images/test4.jpg')
     with open('camera_cali_parameters.pickle','rb') as f:
         output = pickle.load(f)
     mtx = output['mtx']

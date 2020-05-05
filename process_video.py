@@ -47,10 +47,10 @@ def lane_detection(img):
 
 
 if __name__=='__main__':
-    clip = VideoFileClip('harder_challenge_video.mp4').subclip(0,4)
+    clip = VideoFileClip('project_video.mp4')#.subclip(40,44)  #40,44  22,24
     clip_f = clip.fl_image(lane_detection)
     pr = cProfile.Profile()
     pr.enable()
-    clip_f.write_videofile('example_images/harder_challenge_video_test.mp4', audio = False)
+    clip_f.write_videofile('example_images/video_test.mp4', audio = False)
     pr.disable()
     pr.print_stats(sort='time')
